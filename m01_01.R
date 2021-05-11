@@ -27,27 +27,36 @@ rm(df2)
 
 ### filter
 ?dplyr::filter
-## comparacao exata
+
+## comparação exata
 df_ufs <- df %>% filter(author_institution == "Universidade Federal de Sergipe")
-## comparacao com numeros
+
+## comparação com números
 df %>% filter(document_publishing_year >= 2015) %>% select(document_id, document_publishing_year)
+
 ## detectar palavra e retornar a negação do resultado
 ?str_detect
-df %>% filter(!str_detect(author_institution, "Universidade")) %>% select(author_institution)
 
+df_n <- df %>% filter(!str_detect(author_institution, "Universidade")) %>% select(author_institution)
+View(df_n)
 
+### lubridadte - pacote para manipular datas
 ### mutate: serve para criar novas variaveis ou alterar uma ja existente
 lubridate::today()
 today()
 year(today())
+
 ?mutate
-df <- df %>% mutate(intervalo_tempo = year(today()) - document_publishing_year)
-glimpse(df)
-# modificar uma coluna ja existente
-df %>% mutate(journal = str_to_lower(author_institution),
+
+df_mut <- df %>% mutate(intervalo_tempo = year(today()) - document_publishing_year)
+glimpse(df_mut)
+
+# modificar uma coluna já existente
+df_mut %>% mutate(journal = str_to_lower(author_institution),
               area = word(area, 1))
+
 # remover coluna criada
-df <- df %>% select(-intervalo_tempo)
+df_mut <- df_mut %>% select(-intervalo_tempo)
 
 ### group_by + summarise
 # contar linhas por ano
@@ -161,17 +170,3 @@ ggplot(df_top_uni, aes(x = uni, y = qtd)) +
 ggplot(df_top_uni, aes(x = reorder(uni, qtd), y = qtd)) +
   geom_col() + 
   coord_flip()
-
-© 2021 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-Loading complete
